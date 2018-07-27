@@ -1,7 +1,9 @@
+import sys
 import numpy as np
-import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 from functools import partial
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
 
 def pca_axes(X):
     pca = PCA(n_components = 2)
@@ -45,24 +47,24 @@ def draw_ellipse(theta, X, ax):
     plt.draw()
     plt.pause(0.001)
 
-def main():
+if __name__ == '__main__':
     semi_major_axis = 2
     semi_minor_axis = 7
     n_points = 100
     sigma = 0.05
-    n_animation_steps = 1000
+    n_animation_steps = 100
 
     fig = plt.figure()
+    fig.set_tight_layout(True)
     fig.add_subplot(111)
     ax = fig.axes[0]
     ax.grid(color='k', linestyle='--')
 
     X = ellipse(semi_major_axis, semi_minor_axis, sigma, n_points)
     callback = partial(draw_ellipse, X = X, ax = ax)
-    for theta in np.linspace(0, 2 * np.pi, n_animation_steps):
-        callback(theta)
-
-    plt.show()
-
-if __name__ == '__main__':
-    main()
+    theta = np.linspace(0, 2 * np.pi, n_animation_steps)
+    anim = FuncAnimation(fig, callback, frames = theta, interval=200)
+    if len(sys.argv) > 1 and sys.argv[1] == 'save':
+        anim.save('pca.gif', dpi=80, writer='imagemagick')
+    else:
+        plt.show()
