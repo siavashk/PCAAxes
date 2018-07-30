@@ -36,9 +36,6 @@ def draw_ellipse(theta, X, ax):
     X = rotate(X, theta)
     major_axis, minor_axis = pca_axes(X)
 
-    major_axis_text_location = major_axis * 0.5
-    minor_axis_text_location = minor_axis * 0.5
-
     plt.cla()
     plt.grid(True)
     plt.scatter(X[:, 0], X[:, 1])
